@@ -25,8 +25,9 @@ let normalizedMovies = movies.map((movie, i) => {
     youtube: movie.ytid,
   }
 })
+
 // categoriesArray yaratish va optionni selectga append qilish
-normalizedMovies.forEach((movie) => {
+normalizedMovies.forEach((movie, i) => {
   movie.categories.forEach((category) => {
     if (!categoriesArray.includes(category)){
       categoriesArray.push(category);
@@ -41,21 +42,26 @@ categoriesArray.forEach((category) => {
   elCategoriesSelect.appendChild(newCategoryOption);
 })
 
-//templatedan clon olib li yaratish
-let createMovieItem = (movie) => {
+//templatedan clon olib li va modal yaratish
+let createMovieItem = (movie, i) => {
   elResultMoviesList.innerHTML = "";
 
   let elNewLi = elTemplate.cloneNode(true);
+  let elNewModal = elModalTemplate.cloneNode(true);
   $(".youtube-link", elNewLi).href = `https://www.youtube.com/watch?v=${movie.youtube}`;
   $("img", elNewLi).src = `https://i3.ytimg.com/vi/${movie.youtube}/maxresdefault.jpg`
   $(".title", elNewLi).textContent = `Title: ${movie.title}`;
   $(".fulltitle", elNewLi).textContent = `Fulltitle: ${movie.fulltitle}`;
   $(".year", elNewLi).textContent = `Year: ${movie.year}`;
   $(".categories", elNewLi).textContent = `Categories: ${movie.categories}`;
-  // $(".summary", elNewLi).textContent = `Summary: ${movie.summary}`;
   $(".rating",elNewLi).textContent = `Rating: ${movie.rating}`
   $(".runtime", elNewLi).textContent = `Runtime: ${movie.runtime}`;
-
+  $(".more-btn", elNewLi).setAttribute('data-bs-target', `#more-${movie.id}`);
+  $(".bookmark-btn", elNewLi).value = movie.id;
+  $(".js-modal", elNewModal).id = `more-${movie.id}`;
+  $(".modal-title", elNewModal).textContent = `Title: ${movie.title}`;
+  $(".summary", elNewModal).textContent =  `Summary: ${movie.summary}`;
+  elNewLi.appendChild(elNewModal);
   return elNewLi;
 }
 
@@ -63,7 +69,7 @@ let createMovieItem = (movie) => {
 let rendomMovies = (movies) => {
   let elResultFragment = document.createDocumentFragment();
 
-  movies.forEach ((movie) => {
+  movies.forEach ((movie, i) => {
     elResultFragment.appendChild(createMovieItem(movie));
   })
 
@@ -71,18 +77,7 @@ let rendomMovies = (movies) => {
 }
 rendomMovies(normalizedMovies);
 
-// formni eshitish
-elSearchForm.addEventListener("search", (evt) => {
-  evt.preventDefault();
-  
-  let searchMovie = new RegExp(elSearchInput.value.trim(), "gi");
-  
-  let searchResult = normalizedMovies.filter((movie) => {
-    if (movie.title.match(searchMovie)){
-      return (movie.title.match(searchMovie));
-    }
-  })
-  rendomMovies(searchResult);
-})
+
+
 
 
