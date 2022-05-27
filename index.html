@@ -12,21 +12,22 @@
     <h2 class="heading mt-2 fs-1 fw-bold text-center text-dark">Movies</h2>
 
     <form class="search-form fs-4 ms-auto me-auto d-flex flex-wrap w-50 my-4" action="https://echo.htmlacademy.ru" method="get">
-      <input class="form-control search-input border-info my-1" type="search" name="movie" id="movie" aria-label="search" placeholder="Title"  autocomplete="off">
+      <input class="form-control search-input border-info my-1" type="search" name="movie" id="movie" aria-label="search" placeholder="Title" autofocus autocomplete="off">
 
-      <input class="form-control rating-input border-info my-1" type="text" name="rating" id="rating" aria-label="rating" placeholder="Rating" autocomplete="off" value="6" maxlength="1">
+      <input class="form-control rating-input border-info my-1" type="text" name="rating" id="rating" aria-label="rating" placeholder="Rating" autocomplete="off" maxlength="1">
 
       <select class="categories form-select border-info my-1" name="categories" id="categories" aria-label="categories-select">
         <option class="all" value="all" selected>All</option>
       </select>
 
       <select class="sort form-select border-info my-1" name="sort" id="sort" aria-label="sort-select">
-        <option class="a-z" value="1" selected>A-Z</option>
+        <option value="0" disabled selected>Select category</option>
+        <option class="a-z" value="1" >A-Z</option>
         <option class="z-a" value="2">Z-A</option>
-        <option class="to-past" value="3">To past (rating)</option>
-        <option class="to-hight" value="4">To hight (rating)</option>
-        <option class="new" value="5">To past (year)</option>
-        <option class="old" value="6">To hight (year)</option>
+        <option class="new" value="3">To past (year)</option>
+        <option class="old" value="4">To hight (year)</option>
+        <option class="to-past" value="5">To past (rating)</option>
+        <option class="to-hight" value="6">To hight (rating)</option>
       </select>
 
       <button class="btn btn-outline-info fs-5 fw-bold my-1 search-btn" type="submit">Search</button>
