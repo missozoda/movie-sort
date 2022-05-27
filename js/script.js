@@ -1,5 +1,6 @@
 // elementlarni chaqirib olish
 let elSearchForm = $(".search-form");
+let elSearchBtn = $(".search-btn");
 let elSearchInput = $(".search-input", elSearchForm);
 let elResultMoviesList = $(".movies-list");
 let elTemplate = $("#template").content;
@@ -78,6 +79,73 @@ let rendomMovies = (movies) => {
 rendomMovies(normalizedMovies);
 
 
+let sortObjectsAZ = function(array) {
+  return array.sort(function(a, b) {
+    if (a.title > b.title) {
+      return 1;
+    } else if (a.title < b.title) {
+      return -1;
+    } else {
+      return 0;
+    }
+  })
+}
 
+let sortSearchResults = function(results, sortType) {
+  if (sortType === "az") {
+    sortObjectsAZ(results);
+  } else if (sortType === "za") {
+    sortObjectsAZ(results).reverse();
+  }
+}
+
+let findMovies = function(title, rating) {
+  return normalizedMovies.filter(function (movie) {
+    return movie.title.match(title) && movie.imdbRating >= rating; 
+  });
+}
+
+elSearchForm.addEventListener("submit", function(evt) {
+  evt.preventDefault();
+
+  let searchTitle = elSearchInput.value.trim();
+  let movieTitleRegex = new RegExp(searchTitle, "gi");
+
+  let minimumRating = Number(elRatingInput.value);
+  // let genre = elSearchGenreSelect.value;
+  // let sorting = elSearchSortSelect.value;
+  // console.log(sorting);
+
+  let searchResults = findMovies(movieTitleRegex, minimumRating);
+  // sortSearchResults(searchResults, sorting);
+
+  rendomMovies(searchResults);
+})
+
+// let readyMovieArr = [];
+// elSearchForm.addEventListener("submit", function(e){
+//   e.preventDefault();
+
+//   let searchTitle = elSearchInput.value.trim();
+//   if(searchTitle !== null && searchTitle !== ""){
+//     let searchRegExp = new RegExp(searchTitle, 'gi');
+//     console.log(searchRegExp);
+//     readyMovieArr.push(normalizedMovies.filter(function (movie){
+//       console.log(movie.title.match(searchRegExp));
+//       // return(movie.title.match(searchRegExp))
+//     }))
+//   }
+//   rendomMovies(readyMovieArr)
+// })
+
+// elSearchInput.addEventListener("input", function(e){
+//   let searchTitle = elSearchInput.value.trim();
+//   if(searchTitle !== null && searchTitle !== ""){
+//     let searchRegExp = new RegExp(searchTitle, 'gi');
+//     readyMovieArr = normalizedMovies.filter(function (movie){
+//       return(movie.title.match(searchRegExp))
+//     })
+//   }
+// })
 
 
