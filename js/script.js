@@ -10,13 +10,13 @@ let elCategoriesSelect = $(".categories", elSearchForm);
 let elSortSelect = $(".sort", elSearchForm);
 let categoriesArray = [];
 
-movies.splice(25);
+movies.splice(100);
 
 // arrayni normalize qilish
 let normalizedMovies = movies.map((movie, i) => {
   return {
     id: i + 1,
-    title: movie.Title,
+    title: movie.Title.toString(),
     fulltitle: movie.fulltitle,
     year: movie.movie_year,
     categories: movie.Categories.split("|"),
@@ -26,6 +26,19 @@ let normalizedMovies = movies.map((movie, i) => {
     youtube: movie.ytid,
   }
 })
+let normalizedMoviesToAz = function(array){
+  return array.sort(function(a, b){
+    if (a.title > b.title) {
+      return 1;
+    } else if (a.title < b.title) {
+      return -1;
+    } else {
+      return 0;
+    }
+  })
+}
+
+normalizedMoviesToAz(normalizedMovies)
 
 // categoriesArray yaratish va optionni selectga append qilish
 normalizedMovies.forEach((movie, i) => {
@@ -49,6 +62,7 @@ let createMovieItem = (movie, i) => {
 
   let elNewLi = elTemplate.cloneNode(true);
   let elNewModal = elModalTemplate.cloneNode(true);
+
   $(".youtube-link", elNewLi).href = `https://www.youtube.com/watch?v=${movie.youtube}`;
   $("img", elNewLi).src = `https://i3.ytimg.com/vi/${movie.youtube}/maxresdefault.jpg`
   $(".title", elNewLi).textContent = `Title: ${movie.title}`;
@@ -139,67 +153,41 @@ elCategoriesSelect.addEventListener("change", function(e){
   }else{
     readyCategoryMovie = readyRatingMovie;
   }
-  rendomMovies(readyCategoryMovie)
+  rendomMovies(readyCategoryMovie);
 })
 
-// let sortObjectsAZ = function(array) {
-//   return array.sort(function(a, b) {
-//     if (a.title > b.title) {
-//       return 1;
-//     } else if (a.title < b.title) {
-//       return -1;
-//     } else {
-//       return 0;
-//     }
-//   })
-// }
+let sortObjectsHeightToLowRating = function(array) {
+  return array.sort(function(a, b) {
+    return b.rating - a.rating;
+  })
+}
 
-// let sortSearchResults = function(results, selectedSort) {
-//   if (selectedSort === 1) {
-//     sortObjectsAZ(results);
-//   } else if (selectedSort === 2) {
-//     sortObjectsAZ(results).reverse();
-//   }
-// }
+let sortObjectsHeightNewToOld = function(array) {
+  return array.sort(function(a, b) {
+    return b.year - a.year;
+  })
+}
 
-// // sort select
-// let readySortMovie = readyCategoryMovie;
-// elSortSelect.addEventListener("change", function(e){
-//   const selectedSort = Number(elSortSelect.value);
-//   sortSearchResults(readySortMovie, selectedSort)
-// })
-
-
-// let readySortMovie = readyCategoryMovie;
-// elSortSelect.addEventListener("change", function(e){
-//   const selectedSort = Number(elSortSelect.value);
-//   if (selectedSort > 0) {
-//     readySortMovie = sortMovies(readySortMovie, selectedSort);
-//   }
-// })
-
-// const sortMovies = (readySortMovie, selectedSort) => {
-//   switch (selectedSort) {
-//     case 0:
-//       break;
-//     case 1:
-//       readySortMovie.sort((a, b) => a.title > b.title && 1 || -1);
-//       break;
-//     case 2:
-//       readySortMovie.sort((a, b) => a.title < b.title && 1 || -1);
-//       break;
-//     case 3:
-//       readySortMovie.sort((a, b) => b.year - a.year);
-//       break;
-//     case 4:
-//       readySortMovie.sort((a, b) => a.year - b.year);
-//       break;
-//     case 5:
-//       readySortMovie.sort((a, b) => b.rating - a.rating);
-//       break;
-//     case 6:
-//       readySortMovie.sort((a, b) => a.rating - b.rating);
-//       break;
-//   }
-//   return readySortMovie;
-// }
+let readySortMovie = normalizedMovies || readyCategoryMovie;
+elSortSelect.addEventListener("change",function(e){
+  const sorting = Number(elSortSelect.value);
+  if(sorting === 1){
+    return normalizedMoviesToAz(readySortMovie);
+  }
+  if(sorting === 2){
+    return normalizedMoviesToAz(readySortMovie).reverse();
+  }
+  if(sorting === 3){
+    return sortObjectsHeightNewToOld(readySortMovie);
+  }
+  if(sorting === 4){
+    return sortObjectsHeightNewToOld(readySortMovie).reverse();
+  }
+  if(sorting === 5){
+    return sortObjectsHeightToLowRating(readySortMovie);
+  }
+  if(sorting === 6){
+    return sortObjectsHeightToLowRating(readySortMovie).reverse();
+  }
+  rendomMovies(readySortMovie);
+})
