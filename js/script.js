@@ -91,22 +91,21 @@ let rendomMovies = (movies) => {
 rendomMovies(normalizedMovies);
 
 // modal
-let updateMovieModalContent = function(movie) {
-  $(".info-title").textContent = movie.title;
-  $(".info-summary").textContent = movie.summary;
-}
+// let updateMovieModalContent = function(movie) {
+//   $(".info-title").textContent = movie.title;
+//   $(".info-summary").textContent = movie.summary;
+// }
 
-elResultMoviesList.addEventListener("click", function(e){
-  if(e.target.matches(".more-btn")){
-    let movieImdbId = e.target.closest(".js-item").dataset.imdbId;
-    
-    let foundMovie = normalizedMovies.find(function(movie) {
-      return (movie.imdbId === movieImdbId);
-    })
-    // console.log(foundMovie);
-    updateMovieModalContent(foundMovie);
-  }
-})
+// elResultMoviesList.addEventListener("click", function(e){
+//   if(e.target.matches(".more-btn")){
+//     let movieImdbId = e.target.closest(".js-item").dataset.imdbId;
+
+//     let foundMovie = normalizedMovies.find(function(movie) {
+//       return (movie.imdbId === movieImdbId);
+//     })
+//     updateMovieModalContent(foundMovie);
+//   }
+// })
 
 // bookmark
 let bookmarkArray = [];
