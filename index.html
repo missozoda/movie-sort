@@ -33,11 +33,7 @@
       </form>
 
       <!-- bookmark list -->
-      <ul class="bookmark-list list-group-flush m-0 list-unstyled ms-5 me-5 my-4 overflow-auto" style="height: 250px;">
-        <li class="bookmark-item list-group-item-primary p-3 d-flex align-items-center">
-          <p class="bookmark-title fs-5 fw-bold m-0 mx-2">Patton Oswalt: Annihilation</p>
-          <button class="delete-btn btn btn-primary d-block mx-2" type="button">Delete</button>
-        </li>
+      <ul class="bookmark-list list-group m-0 list-unstyled ms-5 me-5 my-4 overflow-auto" style="height: 250px;">
       </ul>
     </section>
 
@@ -45,24 +41,6 @@
     <section class="result-section">
       <ul class="movies-list row w-100 p-0 m-0"></ul>
     </section>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Patton Oswalt: Annihilation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p class="info-summary">Summary: </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- item-template -->
@@ -100,8 +78,29 @@
     </li>
   </template>
 
+  <!-- modal template -->
+  <template id="modal-template">
+    <div class="modal fade modal-window" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title info-title" id="exampleModalLabel">Patton Oswalt: Annihilation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="info-summary">Summary: </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- bookmark template -->
   <template id="bookmark-template">
-    <li class="bookmark-item list-group-item-primary p-3 d-flex align-items-center">
+    <li class="bookmark-item list-group-item-primary p-3 d-flex align-items-center justify-content-between border border-primary">
       <p class="bookmark-title fs-5 fw-bold m-0 mx-2">Patton Oswalt: Annihilation</p>
       <button class="delete-btn btn btn-primary d-block mx-2" type="button">Delete</button>
     </li>

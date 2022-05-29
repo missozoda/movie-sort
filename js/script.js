@@ -8,6 +8,7 @@ let elSortSelect = $(".sort", elSearchForm);
 let elResultMoviesList = $(".movies-list");
 let elBookmarkList = $(".bookmark-list");
 let elTemplate = $("#template").content;
+let elModalTemplate = $("#modal-template").content;
 let elBookmarkTemplate = $("#bookmark-template").content;
 let elModal = $(".js-modal")
 let categoriesArray = [];
@@ -64,6 +65,7 @@ let createMovieItem = (movie, i) => {
   elResultMoviesList.innerHTML = "";
 
   let elNewLi = elTemplate.cloneNode(true);
+  let elModalWindow = elModalTemplate.cloneNode(true);
   $(".js-item", elNewLi).dataset.imdbId = movie.imdbId;
   $(".youtube-link", elNewLi).href = `https://www.youtube.com/watch?v=${movie.youtube}`;
   $("img", elNewLi).src = `https://i3.ytimg.com/vi/${movie.youtube}/maxresdefault.jpg`
@@ -73,8 +75,12 @@ let createMovieItem = (movie, i) => {
   $(".categories", elNewLi).textContent = `Categories: ${movie.categories.join(", ")}`;
   $(".rating",elNewLi).textContent = `Rating: ${movie.rating}`
   $(".runtime", elNewLi).textContent = `Runtime: ${movie.runtime}`;
-  $(".more-btn", elNewLi).setAttribute('data-bs-target', `#more-${movie.id}`);
+  $(".more-btn", elNewLi).setAttribute('data-bs-target', `#exampleModal${movie.id}`);
   $(".bookmark-btn", elNewLi).dataset.imdbId = movie.imdbId;
+  $(".modal-window", elModalWindow).id = "exampleModal"+movie.id;
+  $(".info-title",elModalWindow).textContent = movie.title;
+  $(".info-summary",elModalWindow).textContent = movie.summary;
+  elNewLi.appendChild(elModalWindow);
   return elNewLi;
 }
 
@@ -90,36 +96,39 @@ let rendomMovies = (movies) => {
 }
 rendomMovies(normalizedMovies);
 
-// modal
-// let updateMovieModalContent = function(movie) {
-//   $(".info-title").textContent = movie.title;
-//   $(".info-summary").textContent = movie.summary;
-// }
-
-// elResultMoviesList.addEventListener("click", function(e){
-//   if(e.target.matches(".more-btn")){
-//     let movieImdbId = e.target.closest(".js-item").dataset.imdbId;
-
-//     let foundMovie = normalizedMovies.find(function(movie) {
-//       return (movie.imdbId === movieImdbId);
-//     })
-//     updateMovieModalContent(foundMovie);
-//   }
-// })
-
 // bookmark
 let bookmarkArray = [];
 
 let createBookmarkItem = (movie) => {
   elBookmarkList.innerHTML = null;
   let elNewLi = elBookmarkTemplate.cloneNode(true);
+  $(".bookmark-item", elNewLi).dataset.imdbId = movie.imdbId;
   $(".bookmark-title", elNewLi).textContent = movie.title;
   $(".delete-btn", elNewLi).dataset.imdbId = movie.imdbId;
   return elNewLi
 }
 
+elBookmarkList.addEventListener("click", function(e){
+  if(e.target.matches(".delete-btn")){
+    let movieImdbId = e.target.closest(".bookmark-item").dataset.imdbId;
+
+    let foundMovie = bookmarkArray.find(function(movie) {
+      return movie.imdbId === movieImdbId;
+    })
+    deleteBookmark(foundMovie);
+  }
+})
+
+let deleteBookmark = function(movie){
+  bookmarkArray.splice(bookmarkArray.indexOf(movie), 1);
+  addBookmarkArray(deleteBookmark)
+}
+
 let addBookmarkArray = function(movie){
-  bookmarkArray.push(movie);
+  if(!bookmarkArray.includes(movie)){
+    bookmarkArray.push(movie);
+  }
+
 
   let bookmarkFragment = document.createDocumentFragment();
 
