@@ -9,34 +9,48 @@
 </head>
 <body>
   <div class="container">
-    <h2 class="heading mt-2 fs-1 fw-bold text-center text-dark">Movies</h2>
+    <header>
+      <h2 class="heading mt-2 fs-1 fw-bold text-center text-dark">Movies</h2>
+    </header>
 
-    <form class="search-form fs-4 ms-auto me-auto d-flex flex-wrap w-50 my-4" action="https://echo.htmlacademy.ru" method="get">
-      <input class="form-control search-input border-info my-1" type="search" name="movie" id="movie" aria-label="search" placeholder="Title" autofocus autocomplete="off">
+    <section class="form-section d-flex justify-content-around">
+      <!-- form elements -->
+      <form class="search-form fs-4 d-flex flex-wrap my-4 ms-5 w-50" action="https://echo.htmlacademy.ru" method="get">
+        <input class="form-control search-input border-info my-1" type="search" name="movie" id="movie" aria-label="search" placeholder="Title" autofocus autocomplete="off">
+        <input class="form-control rating-input border-info my-1" type="text" name="rating" id="rating" aria-label="rating" placeholder="Rating" autocomplete="off" maxlength="1">
+        <select class="categories form-select border-info my-1" name="categories" id="categories" aria-label="categories-select">
+          <option class="all" value="all" selected>All</option>
+        </select>
+        <select class="sort form-select border-info my-1" name="sort" id="sort" aria-label="sort-select">
+          <option class="a-z" value="1" selected>A-Z</option>
+          <option class="z-a" value="2">Z-A</option>
+          <option class="new" value="3">To past (year)</option>
+          <option class="old" value="4">To hight (year)</option>
+          <option class="to-past" value="5">To past (rating)</option>
+          <option class="to-hight" value="6">To hight (rating)</option>
+        </select>
+        <button class="btn btn-outline-info fs-5 fw-bold my-1 search-btn" type="submit">Search</button>
+      </form>
 
-      <input class="form-control rating-input border-info my-1" type="text" name="rating" id="rating" aria-label="rating" placeholder="Rating" autocomplete="off" maxlength="1">
+      <!-- bookmark list -->
+      <ul class="bookmark-list list-group-flush m-0 list-unstyled ms-5 me-5 my-4 overflow-auto" style="height: 250px;">
+        <li class="bookmark-item list-group-item-primary p-3 d-flex align-items-center">
+          <p class="bookmark-title fs-5 fw-bold m-0 mx-2">Patton Oswalt: Annihilation</p>
+          <button class="delete-btn btn btn-primary d-block mx-2" type="button">Delete</button>
+        </li>
+      </ul>
+    </section>
 
-      <select class="categories form-select border-info my-1" name="categories" id="categories" aria-label="categories-select">
-        <option class="all" value="all" selected>All</option>
-      </select>
+    <!-- movie list -->
+    <section class="result-section">
+      <ul class="movies-list row w-100 p-0 m-0"></ul>
+    </section>
 
-      <select class="sort form-select border-info my-1" name="sort" id="sort" aria-label="sort-select">
-        <option class="a-z" value="1" selected>A-Z</option>
-        <option class="z-a" value="2">Z-A</option>
-        <option class="new" value="3">To past (year)</option>
-        <option class="old" value="4">To hight (year)</option>
-        <option class="to-past" value="5">To past (rating)</option>
-        <option class="to-hight" value="6">To hight (rating)</option>
-      </select>
-
-      <button class="btn btn-outline-info fs-5 fw-bold my-1 search-btn" type="submit">Search</button>
-    </form>
-
-    <ul class="movies-list row w-100 p-0 m-0"></ul>
   </div>
 
+  <!-- item-template -->
   <template id="template">
-    <li class="card col-4 py-2 m-auto text-center shadow position-relative" style="height: 730px;">
+    <li class="js-item card col-4 py-2 m-auto text-center shadow position-relative" style="height: 730px;">
       <a class="youtube-link card-link d-inline-block" href="https://www.youtube.com/watch?v=4hZi5QaMBFc" target="_blank">
         <img class="card-img-top d-block" src="https://i3.ytimg.com/vi/4hZi5QaMBFc/maxresdefault.jpg" alt="Patton Oswalt: Annihilation" width="500" height="300">
       </a>
@@ -47,16 +61,19 @@
         <p class="card-text categories text-black-50">Uncategorized</p>
         <p class="card-text rating text-black-50">5</p>
         <p class="card-text runtime text-black-50">66</p>
+
         <div class="btn-wrapper position-absolute bottom-0 start-0 end-0 d-flex justify-content-around pb-4 px-2">
-          <button class="more-btn btn btn-outline-dark" type="button"  data-bs-toggle="modal" data-bs-target="#more-">
+          <button class="more-btn btn btn-outline-dark" type="button"  data-bs-toggle="modal" data-bs-target="#more-modal-info">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text mb-1" viewBox="0 0 16 16">
               <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
               <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
             </svg> More</button>
+
           <a class="youtube-link btn btn-outline-danger" href="https://www.youtube.com/watch?v=4hZi5QaMBFc" target="_blank">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
               <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
             </svg> Youtube </a>
+
             <button class="bookmark-btn btn btn-outline-success">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
                 <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
@@ -66,23 +83,11 @@
     </li>
   </template>
 
-  <template id="modal-template">
-    <div class="modal fade js-modal" id="more-" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title title" id="exampleModalLabel">Patton Oswalt: Annihilation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p class="summary">Patton Oswald, despite a personal tragedy, produces his best standup yet. Focusing on the tribulations of the Trump era and life after the loss of a loved one, Patton Oswald continues his journey to contribute joy to the world.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <template id="bookmark-template">
+    <li class="bookmark-item list-group-item-primary p-3 d-flex align-items-center">
+      <p class="bookmark-title fs-5 fw-bold m-0 mx-2">Patton Oswalt: Annihilation</p>
+      <button class="delete-btn btn btn-primary d-block mx-2" type="button">Delete</button>
+    </li>
   </template>
 
   <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -2,12 +2,14 @@
 let elSearchForm = $(".search-form");
 let elSearchBtn = $(".search-btn");
 let elSearchInput = $(".search-input", elSearchForm);
-let elResultMoviesList = $(".movies-list");
-let elTemplate = $("#template").content;
-let elModalTemplate = $("#modal-template").content;
 let elRatingInput = $(".rating-input", elSearchForm);
 let elCategoriesSelect = $(".categories", elSearchForm);
 let elSortSelect = $(".sort", elSearchForm);
+let elResultMoviesList = $(".movies-list");
+let elBookmarkList = $(".bookmark-list");
+let elTemplate = $("#template").content;
+let elBookmarkTemplate = $("#bookmark-template").content;
+let elModal = $(".js-modal")
 let categoriesArray = [];
 
 movies.splice(100);
@@ -21,6 +23,7 @@ let normalizedMovies = movies.map((movie, i) => {
     year: movie.movie_year,
     categories: movie.Categories.split("|"),
     summary: movie.summary,
+    imdbId: movie.imdb_id,
     rating: movie.imdb_rating,
     runtime: movie.runtime,
     youtube: movie.ytid,
@@ -61,8 +64,7 @@ let createMovieItem = (movie, i) => {
   elResultMoviesList.innerHTML = "";
 
   let elNewLi = elTemplate.cloneNode(true);
-  let elNewModal = elModalTemplate.cloneNode(true);
-
+  $(".js-item", elNewLi).dataset.imdbId = movie.imdbId;
   $(".youtube-link", elNewLi).href = `https://www.youtube.com/watch?v=${movie.youtube}`;
   $("img", elNewLi).src = `https://i3.ytimg.com/vi/${movie.youtube}/maxresdefault.jpg`
   $(".title", elNewLi).textContent = `Title: ${movie.title}`;
@@ -72,11 +74,7 @@ let createMovieItem = (movie, i) => {
   $(".rating",elNewLi).textContent = `Rating: ${movie.rating}`
   $(".runtime", elNewLi).textContent = `Runtime: ${movie.runtime}`;
   $(".more-btn", elNewLi).setAttribute('data-bs-target', `#more-${movie.id}`);
-  $(".bookmark-btn", elNewLi).value = movie.id;
-  $(".js-modal", elNewModal).id = `more-${movie.id}`;
-  $(".modal-title", elNewModal).textContent = `Title: ${movie.title}`;
-  $(".summary", elNewModal).textContent =  `Summary: ${movie.summary}`;
-  elNewLi.appendChild(elNewModal);
+  $(".bookmark-btn", elNewLi).dataset.imdbId = movie.imdbId;
   return elNewLi;
 }
 
@@ -91,6 +89,58 @@ let rendomMovies = (movies) => {
   elResultMoviesList.appendChild(elResultFragment);
 }
 rendomMovies(normalizedMovies);
+
+// modal
+let updateMovieModalContent = function(movie) {
+  $(".info-title").textContent = movie.title;
+  $(".info-summary").textContent = movie.summary;
+}
+
+elResultMoviesList.addEventListener("click", function(e){
+  if(e.target.matches(".more-btn")){
+    let movieImdbId = e.target.closest(".js-item").dataset.imdbId;
+    
+    let foundMovie = normalizedMovies.find(function(movie) {
+      return (movie.imdbId === movieImdbId);
+    })
+    // console.log(foundMovie);
+    updateMovieModalContent(foundMovie);
+  }
+})
+
+// bookmark
+let bookmarkArray = [];
+
+let createBookmarkItem = (movie) => {
+  elBookmarkList.innerHTML = null;
+  let elNewLi = elBookmarkTemplate.cloneNode(true);
+  $(".bookmark-title", elNewLi).textContent = movie.title;
+  $(".delete-btn", elNewLi).dataset.imdbId = movie.imdbId;
+  return elNewLi
+}
+
+let addBookmarkArray = function(movie){
+  bookmarkArray.push(movie);
+
+  let bookmarkFragment = document.createDocumentFragment();
+
+  bookmarkArray.forEach((movie) => {
+    bookmarkFragment.appendChild(createBookmarkItem(movie));
+  })
+  elBookmarkList.appendChild(bookmarkFragment);
+}
+
+elResultMoviesList.addEventListener("click", function(evt){
+  if(evt.target.matches(".bookmark-btn")){
+    let movieImdbId = evt.target.closest(".js-item").dataset.imdbId;
+
+    let foundMovie = normalizedMovies.find(function(movie) {
+      return movie.imdbId === movieImdbId;
+    })
+    addBookmarkArray(foundMovie);
+  }
+})
+
 
 // formni eshitish
 let readyMovieArr = normalizedMovies;
@@ -137,7 +187,7 @@ elRatingInput.addEventListener("input", function(e){
 })
 
 // select category ni eshitish
-let readyCategoryMovie = [];
+let readyCategoryMovie = readyRatingMovie;
 elCategoriesSelect.addEventListener("change", function(e){
   let selectCategory = elCategoriesSelect.value;
   if (selectCategory!=="all"){
@@ -168,26 +218,28 @@ let sortObjectsHeightNewToOld = function(array) {
   })
 }
 
-let readySortMovie = normalizedMovies || readyCategoryMovie;
+// let readySortMovie = readyCategoryMovie;
 elSortSelect.addEventListener("change",function(e){
+  let readySortMovie = readyCategoryMovie;
   const sorting = Number(elSortSelect.value);
   if(sorting === 1){
-    return normalizedMoviesToAz(readySortMovie);
+    readySortMovie = normalizedMoviesToAz(readySortMovie);
   }
   if(sorting === 2){
-    return normalizedMoviesToAz(readySortMovie).reverse();
+    readySortMovie = normalizedMoviesToAz(readySortMovie).reverse();
   }
   if(sorting === 3){
-    return sortObjectsHeightNewToOld(readySortMovie);
+    readySortMovie = sortObjectsHeightNewToOld(readySortMovie);
   }
   if(sorting === 4){
-    return sortObjectsHeightNewToOld(readySortMovie).reverse();
+    readySortMovie = sortObjectsHeightNewToOld(readySortMovie).reverse();
   }
   if(sorting === 5){
-    return sortObjectsHeightToLowRating(readySortMovie);
+    readySortMovie = sortObjectsHeightToLowRating(readySortMovie);
   }
   if(sorting === 6){
-    return sortObjectsHeightToLowRating(readySortMovie).reverse();
+    readySortMovie = sortObjectsHeightToLowRating(readySortMovie).reverse();
   }
   rendomMovies(readySortMovie);
 })
+
